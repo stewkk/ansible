@@ -1,0 +1,39 @@
+- hosts: all
+  become: true
+  tasks:
+    - name: Install aptitude
+      apt:
+        name: aptitude
+        state: latest
+        update_cache: true
+    - name: Install packages
+      apt:
+        state: latest
+        pkg:
+        - racket
+        - python3-pip
+        - git
+        - neovim
+        - curl
+        - g++
+        - clang
+        - cppcheck
+        - gdb
+        - build-essential
+        - clang-tidy
+        - clang-format
+        - valgrind
+    - name: Install tldr
+      pip:
+        name: tldr
+    - name: Setup keyboard layouts
+      shell:
+        cmd: gsettings set org.gnome.desktop.input-sources sources "[('xkb', 'us'), ('xkb', 'ru')]" && gsettings set org.gnome.desktop.wm.keybindings switch-input-source "['<Alt>Shift_L']" && gsettings set org.gnome.desktop.wm.keybindings switch-input-source-backward "['<Shift>Alt_L']"
+  roles:
+    - role: gantsign.visual-studio-code
+      users:
+        - username: st
+          visual_studio_code_extensions:
+            - ms-python.python
+            - ms-vscode.cpptools
+            - ms-vscode.cmake-tools
